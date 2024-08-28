@@ -13,6 +13,8 @@ GraphQL: Query language for your API, giving clients the power to ask for exactl
 Socket.IO: Enables real-time bidirectional event-based communication.
 Redis: In-memory data structure store, used for caching.
 MongoDB: NoSQL database used to store chat, message, group, and user data.
+Directives: Custom GraphQL directives for cache management and authentication, reducing code complexity.
+
 Installation
 Clone the repository:
 
