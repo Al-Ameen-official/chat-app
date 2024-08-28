@@ -1,0 +1,77 @@
+{
+  "name": "chat-app",
+  "version": "1.0.0",
+  "description": "A node based application designed for npm workspace",
+  "keywords": [
+    "apollo"
+  ],
+  "private": true,
+  "lint-staged": {
+    "./src/**/*.ts": [
+      "eslint ./src/*.ts --no-warn-ignored --ignore-pattern **/generated/*.ts",
+      "prettier --write"
+    ]
+  },
+  "scripts": {
+    "test": "jest --testPathPattern=./e2e --forceExit",
+    "postbuild": "node ./scripts/copyfiles.js",
+    "build": "tsc",
+    "serve": "tsx watch ./src/app.ts",
+    "start": "node ./dist/app.js",
+    "docker:build": "docker build -t $ECR_REGISTRY/chat-app:$Environment -t $ECR_REGISTRY/chat-app:$IMAGE_TAG -f Dockerfile ../../",
+    "docker:push": "docker push --all-tags $ECR_REGISTRY/chat-app",
+    "codegen:type": "graphql-codegen --config codegen.type.yaml -w",
+    "commit": "git-cz"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.11.0",
+    "@commitlint/cli": "^19.4.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.0.9",
+    "@graphql-codegen/typescript-resolvers": "^4.2.1",
+    "@graphql-tools/load-files": "^7.0.0",
+    "@graphql-tools/merge": "^9.0.6",
+    "@graphql-tools/utils": "^10.5.4",
+    "@hubspire/cache-directive": "^1.2.5",
+    "@hubspire/rate-limiter": "^1.0.4",
+    "@parcel/watcher": "^2.4.1",
+    "@types/cors": "^2.8.17",
+    "@types/jest": "^29.5.12",
+    "@types/lodash": "^4.17.7",
+    "@types/luxon": "^3.4.2",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "commitizen": "^4.3.0",
+    "commitlint-config-gitmoji": "^2.3.1",
+    "cors": "^2.8.5",
+    "cz-customizable": "^7.2.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "express-winston": "^4.2.0",
+    "graphql": "^16.9.0",
+    "graphql-scalars": "^1.23.0",
+    "husky": "^9.0.11",
+    "jest": "^29.7.0",
+    "jsonwebtoken": "^9.0.2",
+    "lint-staged": "^15.2.9",
+    "mongodb-memory-server": "^10.0.0",
+    "mongoose": "^8.5.4",
+    "nx": "^19.6.2",
+    "rimraf": "^6.0.1",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5",
+    "ts-jest": "^29.2.5",
+    "tslib": "^2.7.0",
+    "tsx": "^4.18.0",
+    "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.6"
+  }
+}

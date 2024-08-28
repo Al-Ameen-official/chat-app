@@ -1,0 +1,20 @@
+overwrite: true
+generates:
+  ./src/libs/types/generated/base-types.ts:
+    schema: ./src/modules/**/*.graphql
+    plugins:
+      - typescript
+      - typescript-resolvers
+    config:
+      useIndexSignature: true
+      contextType: ../index#ChatAppContext
+      scalars:
+        DateTime: Date
+        EmailAddress: string
+      mappers:
+        User: ../../../modules/user/user.model#IUserDocument
+        Chat: ../../../modules/chat/chat.model#IChatDocument
+        Message: ../../../modules/message/message.model#IMessageDocument
+        Reaction: ../../../modules/message/reaction.model#IReactionDocument
+        Group: ../../../modules/group/group.model#IGroupDocument
+        Member: ../../../modules/group/member.model#IMemberDocument

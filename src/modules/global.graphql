@@ -1,0 +1,18 @@
+scalar JSON
+scalar DateTime
+scalar EmailAddress
+scalar Password
+
+directive @cacheSet(type: String!, identifier: String!, maxAge: Int = 900) on FIELD_DEFINITION
+
+input CachePurgeInput {
+  types: [String!]!
+  identifier: String
+}
+directive @cachePurge(payloads: [CachePurgeInput!]!) on FIELD_DEFINITION
+
+input rateLimitInput {
+  max: Int!
+  window: String!
+}
+directive @rateLimit(limits: [rateLimitInput!]!, message: String, identityArgs: [String], uncountRejected: Boolean) on FIELD_DEFINITION

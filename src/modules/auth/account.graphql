@@ -1,0 +1,16 @@
+type logOut {
+  status: Boolean!
+  message: String!
+}
+type logIn {
+  token: String!
+  refreshToken: String!
+}
+type Query {
+  currentUser: User
+}
+type Mutation {
+  logIn(email: String!, password: String!): logIn!
+  logout(userId: String!): logOut!
+  genToken(refreshToken: String!): String!
+}

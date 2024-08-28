@@ -1,0 +1,45 @@
+input CreateChatInput {
+  chatWith: ID!
+  totalMessages: Int
+  isMute: Boolean
+  totalUnreadMessages: Int
+  isblocked: Boolean
+}
+input UpdateChatInput {
+  _id: ID!
+  chatWith: ID!
+  totalMessages: Int
+  isMute: Boolean
+  totalUnreadMessages: Int
+  isblocked: Boolean
+}
+
+type Chat {
+  _id: ID!
+  userId: ID!
+  chatWith: ID!
+  totalMessages: Int
+  isMute: Boolean
+  totalUnreadMessages: Int
+  isblocked: Boolean
+  chatWithUser: User
+  Messages(search: String, filter: JSON, sort: JSON, limit: Int, offset: Int): [Message]
+  user: User
+}
+
+type Query {
+  getChatById(_id: ID!): Chat @cacheSet(type: "getChatById", identifier: "_id")
+  getAllChat(search: String, filter: JSON, sort: JSON, limit: Int, offset: Int): [Chat]! @cacheSet(type: "getAllChat", identifier: "_id")
+  getOneChat(filter: JSON, sort: JSON): Chat @cacheSet(type: "getOneChat", identifier: "_id")
+  getAllChatCount(search: String, filter: JSON): Int!
+}
+
+type Mutation {
+  createChat(data: CreateChatInput!): Chat! @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat"] }])
+  createManyChat(datas: [CreateChatInput!]!): [Chat!]! @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat"] }])
+  updateChat(data: UpdateChatInput!): Chat! @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat", "getChatById"], identifier: "_id" }])
+  updateManyChat(datas: [UpdateChatInput!]!): [Chat!]!
+    @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat", "getChatById"], identifier: "_id" }])
+  deleteChat(_id: ID!): Chat! @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat", "getChatById"], identifier: "_id" }])
+  deleteManyChat(filter: JSON!): [Chat!]! @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat", "getChatById"], identifier: "_id" }])
+}

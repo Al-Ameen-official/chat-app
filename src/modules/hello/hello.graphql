@@ -1,0 +1,3 @@
+type Query {
+  chatAppHello: String! @rateLimit(limits: [{ max: 5, window: "10s" }, { max: 15, window: "1m" }, { max: 50, window: "1d" }], uncountRejected: true)
+}
