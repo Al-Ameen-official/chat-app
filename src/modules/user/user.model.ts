@@ -42,9 +42,10 @@ const UserSchema = new Schema<IUserDocument, IUserModel>(
     },
     profileImage: {
       type: String,
-      required: true,
+      required: false,
       unique: false,
       trim: true,
+      default: "",
     },
   },
   {

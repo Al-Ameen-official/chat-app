@@ -7,6 +7,8 @@ export function ServiceVerify(req: Partial<Request>) {
 export function TokenVerify(token: string) {
   try {
     if (token) {
+      console.log("TOKEN VERIFY RES", "Bearer" + " " + token);
+
       const response = jwt.verify(token, toString(process.env.JWT_LOGIN_SECRET));
       console.log("TOKEN VERIFY RES", response);
       return response as JwtPayload;

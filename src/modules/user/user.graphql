@@ -24,18 +24,19 @@ input UpdateUserInput {
 }
 
 type Query {
-  getUserById(_id: ID!): User @cacheSet(type: "getUserById", identifier: "_id")
-  getAllUser(search: String, filter: JSON, sort: JSON, limit: Int, offset: Int): [User]! @cacheSet(type: "getAllUser", identifier: "_id")
-  getOneUser(filter: JSON, sort: JSON): User @cacheSet(type: "getOneUser", identifier: "_id")
-  getAllUserCount(search: String, filter: JSON): Int!
+  getUserById(_id: ID!): User @auth @cacheSet(type: "getUserById", identifier: "_id")
+  getAllUser(search: String, filter: JSON, sort: JSON, limit: Int, offset: Int): [User]! @auth @cacheSet(type: "getAllUser", identifier: "_id")
+  getOneUser(filter: JSON, sort: JSON): User @auth @cacheSet(type: "getOneUser", identifier: "_id")
+  getAllUserCount(search: String, filter: JSON): Int! @auth
 }
 
 type Mutation {
-  createUser(data: CreateUserInput!): User! @cachePurge(payloads: [{ types: ["getOneUser", "getAllUser"] }])
-  createManyUser(datas: [CreateUserInput!]!): [User!]! @cachePurge(payloads: [{ types: ["getOneUser", "getAllUser"] }])
+  createUser(data: CreateUserInput!): User! @auth @cachePurge(payloads: [{ types: ["getOneUser", "getAllUser"] }])
+  createManyUser(datas: [CreateUserInput!]!): [User!]! @auth @cachePurge(payloads: [{ types: ["getOneUser", "getAllUser"] }])
   updateUser(data: UpdateUserInput!): User! @cachePurge(payloads: [{ types: ["getOneUser", "getAllUser", "getUserById"], identifier: "_id" }])
   updateManyUser(datas: [UpdateUserInput!]!): [User!]!
+    @auth
     @cachePurge(payloads: [{ types: ["getOneUser", "getAllUser", "getUserById"], identifier: "_id" }])
-  deleteUser(_id: ID!): User! @cachePurge(payloads: [{ types: ["getOneUser", "getAllUser", "getUserById"], identifier: "_id" }])
-  deleteManyUser(filter: JSON!): [User!]! @cachePurge(payloads: [{ types: ["getOneUser", "getAllUser", "getUserById"], identifier: "_id" }])
+  deleteUser(_id: ID!): User! @auth @cachePurge(payloads: [{ types: ["getOneUser", "getAllUser", "getUserById"], identifier: "_id" }])
+  deleteManyUser(filter: JSON!): [User!]! @auth @cachePurge(payloads: [{ types: ["getOneUser", "getAllUser", "getUserById"], identifier: "_id" }])
 }

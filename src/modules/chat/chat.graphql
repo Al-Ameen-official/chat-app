@@ -28,18 +28,19 @@ type Chat {
 }
 
 type Query {
-  getChatById(_id: ID!): Chat @cacheSet(type: "getChatById", identifier: "_id")
-  getAllChat(search: String, filter: JSON, sort: JSON, limit: Int, offset: Int): [Chat]! @cacheSet(type: "getAllChat", identifier: "_id")
-  getOneChat(filter: JSON, sort: JSON): Chat @cacheSet(type: "getOneChat", identifier: "_id")
+  getChatById(_id: ID!): Chat @auth @cacheSet(type: "getChatById", identifier: "_id")
+  getAllChat(search: String, filter: JSON, sort: JSON, limit: Int, offset: Int): [Chat]! @auth @cacheSet(type: "getAllChat", identifier: "_id")
+  getOneChat(filter: JSON, sort: JSON): Chat @auth @cacheSet(type: "getOneChat", identifier: "_id")
   getAllChatCount(search: String, filter: JSON): Int!
 }
 
 type Mutation {
-  createChat(data: CreateChatInput!): Chat! @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat"] }])
-  createManyChat(datas: [CreateChatInput!]!): [Chat!]! @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat"] }])
-  updateChat(data: UpdateChatInput!): Chat! @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat", "getChatById"], identifier: "_id" }])
+  createChat(data: CreateChatInput!): Chat! @auth @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat"] }])
+  createManyChat(datas: [CreateChatInput!]!): [Chat!]! @auth @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat"] }])
+  updateChat(data: UpdateChatInput!): Chat! @auth @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat", "getChatById"], identifier: "_id" }])
   updateManyChat(datas: [UpdateChatInput!]!): [Chat!]!
+    @auth
     @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat", "getChatById"], identifier: "_id" }])
-  deleteChat(_id: ID!): Chat! @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat", "getChatById"], identifier: "_id" }])
-  deleteManyChat(filter: JSON!): [Chat!]! @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat", "getChatById"], identifier: "_id" }])
+  deleteChat(_id: ID!): Chat! @auth @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat", "getChatById"], identifier: "_id" }])
+  deleteManyChat(filter: JSON!): [Chat!]! @auth @cachePurge(payloads: [{ types: ["getOneChat", "getAllChat", "getChatById"], identifier: "_id" }])
 }

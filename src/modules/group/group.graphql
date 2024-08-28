@@ -49,20 +49,25 @@ input UpdateMember {
   isDeleted: Boolean
 }
 type Query {
-  getGroupById(_id: ID!): Group @cacheSet(type: "getGroupById", identifier: "_id")
-  getAllGroup(search: String, filter: JSON, sort: JSON, limit: Int, offset: Int): [Group]! @cacheSet(type: "getAllGroup", identifier: "_id")
-  getOneGroup(filter: JSON, sort: JSON): Group @cacheSet(type: "getOneGroup", identifier: "_id")
+  getGroupById(_id: ID!): Group @auth @cacheSet(type: "getGroupById", identifier: "_id")
+  getAllGroup(search: String, filter: JSON, sort: JSON, limit: Int, offset: Int): [Group]! @auth @cacheSet(type: "getAllGroup", identifier: "_id")
+  getOneGroup(filter: JSON, sort: JSON): Group @auth @cacheSet(type: "getOneGroup", identifier: "_id")
   getAllGroupCount(search: String, filter: JSON): Int!
 }
 
 type Mutation {
   addMember(data: AddMember!): Member!
   updateMember(data: UpdateMember!): Member!
-  createGroup(data: CreateGroupInput!): Group! @cachePurge(payloads: [{ types: ["getOneGroup", "getAllGroup"] }])
-  createManyGroup(datas: [CreateGroupInput!]!): [Group!]! @cachePurge(payloads: [{ types: ["getOneGroup", "getAllGroup"] }])
-  updateGroup(data: UpdateGroupInput!): Group! @cachePurge(payloads: [{ types: ["getOneGroup", "getAllGroup", "getGroupById"], identifier: "_id" }])
-  updateManyGroup(datas: [UpdateGroupInput!]!): [Group!]!
+  createGroup(data: CreateGroupInput!): Group! @auth @cachePurge(payloads: [{ types: ["getOneGroup", "getAllGroup"] }])
+  createManyGroup(datas: [CreateGroupInput!]!): [Group!]! @auth @cachePurge(payloads: [{ types: ["getOneGroup", "getAllGroup"] }])
+  updateGroup(data: UpdateGroupInput!): Group!
+    @auth
     @cachePurge(payloads: [{ types: ["getOneGroup", "getAllGroup", "getGroupById"], identifier: "_id" }])
-  deleteGroup(_id: ID!): Group! @cachePurge(payloads: [{ types: ["getOneGroup", "getAllGroup", "getGroupById"], identifier: "_id" }])
-  deleteManyGroup(filter: JSON!): [Group!]! @cachePurge(payloads: [{ types: ["getOneGroup", "getAllGroup", "getGroupById"], identifier: "_id" }])
+  updateManyGroup(datas: [UpdateGroupInput!]!): [Group!]!
+    @auth
+    @cachePurge(payloads: [{ types: ["getOneGroup", "getAllGroup", "getGroupById"], identifier: "_id" }])
+  deleteGroup(_id: ID!): Group! @auth @cachePurge(payloads: [{ types: ["getOneGroup", "getAllGroup", "getGroupById"], identifier: "_id" }])
+  deleteManyGroup(filter: JSON!): [Group!]!
+    @auth
+    @cachePurge(payloads: [{ types: ["getOneGroup", "getAllGroup", "getGroupById"], identifier: "_id" }])
 }

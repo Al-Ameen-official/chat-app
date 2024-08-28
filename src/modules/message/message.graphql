@@ -66,25 +66,31 @@ type Message {
 }
 
 type Query {
-  getMessageById(_id: ID!): Message @cacheSet(type: "getMessageById", identifier: "_id")
-  getAllMessage(search: String, filter: JSON, sort: JSON, limit: Int, offset: Int): [Message]! @cacheSet(type: "getAllMessage", identifier: "_id")
-  getOneMessage(filter: JSON, sort: JSON): Message @cacheSet(type: "getOneMessage", identifier: "_id")
+  getMessageById(_id: ID!): Message @auth @cacheSet(type: "getMessageById", identifier: "_id")
+  getAllMessage(search: String, filter: JSON, sort: JSON, limit: Int, offset: Int): [Message]!
+    @auth
+    @cacheSet(type: "getAllMessage", identifier: "_id")
+  getOneMessage(filter: JSON, sort: JSON): Message @auth @cacheSet(type: "getOneMessage", identifier: "_id")
   getAllMessageCount(search: String, filter: JSON): Int!
   getAllReactionCount(search: String, filter: JSON): Int!
-  getAllReaction(search: String, filter: JSON, sort: JSON, limit: Int, offset: Int): [Reaction]! @cacheSet(type: "getAllMessage", identifier: "_id")
+  getAllReaction(search: String, filter: JSON, sort: JSON, limit: Int, offset: Int): [Reaction]!
+    @auth
+    @cacheSet(type: "getAllMessage", identifier: "_id")
 }
 
 type Mutation {
-  createReaction(data: CreateReactionInput!): Reaction!
-  updateReaction(data: UpdateReactionInput!): Reaction!
-  deleteReaction(_id: ID!): Boolean!
-  createMessage(data: CreateMessageInput!): Message! @cachePurge(payloads: [{ types: ["getOneMessage", "getAllMessage"] }])
-  createManyMessage(datas: [CreateMessageInput!]!): [Message!]! @cachePurge(payloads: [{ types: ["getOneMessage", "getAllMessage"] }])
+  createReaction(data: CreateReactionInput!): Reaction! @auth
+  updateReaction(data: UpdateReactionInput!): Reaction! @auth
+  deleteReaction(_id: ID!): Boolean! @auth
+  createMessage(data: CreateMessageInput!): Message! @auth @cachePurge(payloads: [{ types: ["getOneMessage", "getAllMessage"] }])
+  createManyMessage(datas: [CreateMessageInput!]!): [Message!]! @auth @cachePurge(payloads: [{ types: ["getOneMessage", "getAllMessage"] }])
   updateMessage(data: UpdateMessageInput!): Message!
+    @auth
     @cachePurge(payloads: [{ types: ["getOneMessage", "getAllMessage", "getMessageById"], identifier: "_id" }])
   updateManyMessage(datas: [UpdateMessageInput!]!): [Message!]!
     @cachePurge(payloads: [{ types: ["getOneMessage", "getAllMessage", "getMessageById"], identifier: "_id" }])
-  deleteMessage(_id: ID!): Message! @cachePurge(payloads: [{ types: ["getOneMessage", "getAllMessage", "getMessageById"], identifier: "_id" }])
+  deleteMessage(_id: ID!): Message! @auth @cachePurge(payloads: [{ types: ["getOneMessage", "getAllMessage", "getMessageById"], identifier: "_id" }])
   deleteManyMessage(filter: JSON!): [Message!]!
+    @auth
     @cachePurge(payloads: [{ types: ["getOneMessage", "getAllMessage", "getMessageById"], identifier: "_id" }])
 }

@@ -740,6 +740,10 @@ export type ResolversParentTypes = ResolversObject<{
   removeMember: RemoveMember;
 }>;
 
+export type AuthDirectiveArgs = { };
+
+export type AuthDirectiveResolver<Result, Parent, ContextType = ChatAppContext, Args = AuthDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
 export type CachePurgeDirectiveArgs = {
   payloads: Array<CachePurgeInput>;
 };
@@ -946,6 +950,7 @@ export type Resolvers<ContextType = ChatAppContext> = ResolversObject<{
 }>;
 
 export type DirectiveResolvers<ContextType = ChatAppContext> = ResolversObject<{
+  auth?: AuthDirectiveResolver<any, any, ContextType>;
   cachePurge?: CachePurgeDirectiveResolver<any, any, ContextType>;
   cacheSet?: CacheSetDirectiveResolver<any, any, ContextType>;
   rateLimit?: RateLimitDirectiveResolver<any, any, ContextType>;
