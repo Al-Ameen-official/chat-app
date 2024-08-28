@@ -20,8 +20,7 @@
     "start": "node ./dist/app.js",
     "docker:build": "docker build -t $ECR_REGISTRY/chat-app:$Environment -t $ECR_REGISTRY/chat-app:$IMAGE_TAG -f Dockerfile ../../",
     "docker:push": "docker push --all-tags $ECR_REGISTRY/chat-app",
-    "codegen:type": "graphql-codegen --config codegen.type.yaml -w",
-    "commit": "git-cz"
+    "codegen:type": "graphql-codegen --config codegen.type.yaml -w"
   },
   "dependencies": {
     "@apollo/server": "^4.11.0",
